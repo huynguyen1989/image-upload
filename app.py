@@ -61,13 +61,16 @@ def category():
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
+    if 'username' not in session:
+        return redirect(url_for('login'))
     sql ="""SELECT `CategoryID`, `CategoryName`, `Description` FROM `Categories`"""
     categories = None
     with connection.cursor() as cursor:
             try:
                 cursor.execute(sql)
                 categories = cursor.fetchall()
-                
+                if not len(categories):
+                    return "Category table is empty" 
             except Exception as e:
                 print(f"Get All Categories Errors: {str(e)}")
     
@@ -108,6 +111,8 @@ def categories():
             try:
                 cursor.execute(sql)
                 categories = cursor.fetchall()
+                if not len(categories):
+                    return "Category table is empty" 
                 return categories
             except Exception as e:
                 print(f"Get All Categories Errors: {str(e)}")
