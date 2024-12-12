@@ -1,0 +1,20 @@
+{% extends 'base.html' %} {% block content %}
+<div class="grid grid-cols-1 gap-4 bg-gray-900 text-white">
+    <div class="grid grid-cols-1 py-16">
+        <div class="text-center px-12 py-12 text-white">
+            <a href="/category" class="btn btn-primary font-medium bg-sky-500 hover:bg-sky-700 px-12 py-12">Create Category</a>
+        </div>
+        <div class="text-center px-12 py-12 text-white">
+            <a href="/upload" class="btn btn-primary font-medium bg-sky-500 hover:bg-sky-700 px-12 py-12">Upload Images</a>
+            
+        </div>
+    </div>
+</div>
+<script>
+    const form = document.getElementById("category-form");
+
+    form.addEventListener("submit", (e) => {
+        // e.preventDefault();
+    });
+</script>
+{% endblock %}

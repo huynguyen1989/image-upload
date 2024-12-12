@@ -1,0 +1,54 @@
+{% extends 'base.html' %} {% block content %}
+<div class="grid grid-cols-1 gap-4 bg-gray-900 text-white px-12">
+    <h2 class="py-16 text-3xl font-semibold text-white">Create Category</h2>
+    {% if error %}
+    <div class="bg-red-500 text-white p-3 mb-4 rounded-md text-white">
+        <p class="text-white"><i class="fas fa-exclamation-triangle text-white"></i> {{ error }}</p>
+    </div>
+    {% endif %}
+    <div class="grid grid-cols-1">
+        <form action="/category" method="POST" onsubmit="e => e.preventDefault()" id="category-form"
+            class="grid grid-cols-1" enctype="multipart/form-data">
+
+            <label for="category_name" class="text-white">Name</label>
+            <input id="category_name" type="text" name="category_name" />
+
+            <label for="category_description" class="text-white">Description</label></p>
+            <textarea id="category_description" name="category_description" rows="2" cols="50"></textarea>
+
+            <button type="submit"
+                class="flex items-center gap-x-2 block w-full px-4 py-2 text-center font-bold text-white"
+                role="menuitem" tabindex="-1" id="menu-item-3">
+                Submit
+            </button>
+        </form>
+    </div>
+
+</div>
+<!-- <script>
+    const form = document.getElementById("category-form");
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const inputCategoryName = document.getElementById('category_name')
+
+        if(!inputCategoryName.value){
+            return void(0)
+        }
+
+        fetch("/category", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                categoryName: inputCategoryName.value,
+            }),
+        })
+            .then((response) => response.json())
+            .then((data) => console.log(data))
+            .catch((error) => console.log(error));
+    });
+</script> -->
+{% endblock %}
