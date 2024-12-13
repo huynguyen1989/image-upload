@@ -1,23 +1,24 @@
 {% extends 'base.html' %} {% block content %}
 
-<div class="grid grid-cols-1 gap-4 bg-gray-900 text-white px-12 py-12">
+<div class="grid grid-cols-1 gap-4 bg-gray-900 text-white px-12">
   
+    <h2 class="pt-16 text-3xl font-semibold text-white">All Categories</h2>
     {% if error %}
     <div class="bg-red-500 text-white p-3 mb-4 rounded-md text-white">
         <p class="text-white"><i class="fas fa-exclamation-triangle text-white"></i> {{ error }}</p>
     </div>
     {% endif %}
     
-    {% if notification %}
-    <div class="bg-blue-500 text-white p-3 mb-4 rounded-md text-white">
-        <p class="text-white"><i class="fas fa-exclamation-triangle text-white"></i> {{ notification }}</p>
+    {% if success %}
+    <div class="bg-red-500 text-white p-3 mb-4 rounded-md text-white">
+        <p class="text-white"><i class="fas fa-exclamation-triangle text-white"></i> {{ success }}</p>
     </div>
     {% endif %}
     
     <div class="flex flex-col space-y-6">
     {% for category in categories %}
         <label for="category_name" class="text-white">Category Name:{{category.CategoryName}} - CategoryID:{{category.CategoryID}}</label>
-        <p class="text-white">{{category.Description}}</p>   
+            
         <div class="flex flex-row overflow-auto">
                 {% for image in category.uploaded_images %}
                     <img class="image-thumbnail" src="{{image.ImageURL}}" alt="" srcset="">
@@ -25,13 +26,9 @@
         </div>
         
     {% endfor %}
-    </div>
-</div>
-<script>
-    const form = document.getElementById("category-form");
 
-    form.addEventListener("submit", (e) => {
-        // e.preventDefault();
-    });
-</script>
+
+    </div>
+
+</div>
 {% endblock %}

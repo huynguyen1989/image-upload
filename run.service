@@ -5,8 +5,8 @@ After=network.target
 [Service]
 User=root
 Group=www-data
-WorkingDirectory=~/WebServer/Login-Template-Flask-master
-Environment="PATH=/root/WebServer/Login-Template-Flask-master/.venv/bin"
+WorkingDirectory=~/WebServer/ImageUpload
+Environment="PATH=/root/WebServer/ImageUpload/.venv/bin"
 ExecStart=gunicorn --bind 127.0.0.1:5555 app:app
 
 [Install]

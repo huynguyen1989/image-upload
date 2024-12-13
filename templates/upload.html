@@ -14,14 +14,14 @@
             <input class="text-white" type="file" name="file" multiple />
 
             <label class="text-white" for="category">Choose a category:</label>
-            <select name="category" id="category-list">
+            <select name="category" id="category-list" class="text-black py-2">
                 {% for category in categories %}
                 <option value="{{category.CategoryID}}">{{category.CategoryName}}</option>
                 {% endfor %}
             </select>
 
             <button type="submit"
-                class="flex items-center gap-x-2 block w-full px-4 py-2 text-center font-bold text-white">
+                class="pt-4 flex items-center gap-x-2 block w-full px-4 py-2 text-center font-bold text-white">
                 Submit
             </button>
         </form>

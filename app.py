@@ -4,12 +4,10 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from models.db import connection
 import json
 
-
-
 app = Flask(__name__)
 app.config.from_object("config.Config")
 
-app.config['UPLOAD_FOLDER']  = "./uploads/"
+app.config['UPLOAD_FOLDER']  = "./static/uploads/"
 
 # Routes
 @app.route('/', methods=['GET', 'POST'])
@@ -30,12 +28,26 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('login'))
 
-@app.route('/dashboard')
+@app.route('/dashboard', methods=['GET'])
 def dashboard():
-    if 'username' in session:
-        return render_template('dashboard.html', username=session['username'])
-    else:
+    if not 'username' in session:
         return redirect(url_for('login'))
+    
+    sql_select_categories ="""SELECT `CategoryID`, `CategoryName`, `Description` FROM Categories c"""
+    sql_select_images = """SELECT `ImageID`, `ImageURL` FROM SecondTask.Images i WHERE i.CategoryID IN (%s)"""
+    categories = []
+    with connection.cursor() as cursor:
+            try:
+                cursor.execute(sql_select_categories)
+                categories = cursor.fetchall()
+                if len(categories):
+                    for category in categories:
+                        cursor.execute(sql_select_images, (category["CategoryID"]))
+                        category["uploaded_images"] = cursor.fetchall()
+            except Exception as e:
+                print(f"Get All Categories Errors: {str(e)}")
+    
+    return render_template('dashboard.html', username=session['username'], categories=categories)
 
 @app.route('/category', methods=['GET', 'POST'])
 def category():
@@ -63,11 +75,11 @@ def category():
 def upload():
     if 'username' not in session:
         return redirect(url_for('login'))
-    sql ="""SELECT `CategoryID`, `CategoryName`, `Description` FROM `Categories`"""
+    sql_select_categories ="""SELECT `CategoryID`, `CategoryName`, `Description` FROM `Categories`"""
     categories = None
     with connection.cursor() as cursor:
             try:
-                cursor.execute(sql)
+                cursor.execute(sql_select_categories)
                 categories = cursor.fetchall()
                 if not len(categories):
                     return "Category table is empty" 
@@ -85,11 +97,12 @@ def upload():
             try:
                 files = request.files.getlist("file")        
                 for file in files:
-                    # Use MD5 hash for filename
-                    md5_filename_hash = md5(str(file.filename).encode(), usedforsecurity=True).hexdigest()
-                    filename_hash_with_extension =  f'{md5_filename_hash}.{str(file.filename).split(".")[1]}'
                     
-                    saving_directory = os.path.join(app.config['UPLOAD_FOLDER'], filename_hash_with_extension) # type: ignore
+                    # Use MD5 hash for filename
+                    # md5_filename_hash = md5(str(file.filename).encode(), usedforsecurity=True).hexdigest()
+                    # filename_hash_with_extension =  f'{md5_filename_hash}.{str(file.filename).split(".")[1]}'
+                    
+                    saving_directory = os.path.join(app.config['UPLOAD_FOLDER'], str(file.filename)) # type: ignore
                     
                     file.save(saving_directory)
                     
@@ -99,23 +112,48 @@ def upload():
             except Exception as e:
                 print(f"Upload Images Errors: {str(e)}")
         
-        return render_template('upload.html', categories=categories)
-        
+        sql_select_images = """SELECT `ImageID`, `ImageURL` FROM SecondTask.Images i WHERE i.CategoryID IN (%s)"""
+        categories = []
+        with connection.cursor() as cursor:
+                try:
+                    cursor.execute(sql_select_categories)
+                    categories = cursor.fetchall()
+                    if not len(categories):
+                        return "Category table is empty" 
+                    
+                    for category in categories:
+                        cursor.execute(sql_select_images, (category["CategoryID"]))
+                        category["uploaded_images"] = cursor.fetchall()
+                except Exception as e:
+                    print(f"Get All Categories Errors: {str(e)}")
+    
+        return render_template('dashboard.html', username=session['username'], categories=categories, notification='Upload Success')
+    
     return render_template('upload.html', categories=categories)
 
 @app.route('/categories', methods=['GET'])
 def categories():
-    sql ="""SELECT `CategoryID`, `CategoryName`, `Description` FROM `Categories`"""
-    categories = None
+    sql_select_categories ="""SELECT `CategoryID`, `CategoryName`, `Description` FROM Categories c"""
+    sql_select_images = """SELECT `ImageID`, `ImageURL` FROM SecondTask.Images i WHERE i.CategoryID IN (%s)"""
+    categories = []
+    # uploaded_images = []
     with connection.cursor() as cursor:
             try:
-                cursor.execute(sql)
+                cursor.execute(sql_select_categories)
                 categories = cursor.fetchall()
+                # print(type(categories, '--------'))
+                # import pdb; pdb.set_trace()
                 if not len(categories):
                     return "Category table is empty" 
-                return categories
+                
+                for category in categories:
+                    cursor.execute(sql_select_images, (category["CategoryID"]))
+                    category["uploaded_images"] = cursor.fetchall()
+                    # uploaded_images.append(cursor.fetchall())
             except Exception as e:
                 print(f"Get All Categories Errors: {str(e)}")
+    
+    return render_template('categories.html', categories=categories)
 
 # Run the application
 if __name__ == '__main__':
