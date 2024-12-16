@@ -1,0 +1,31 @@
+{% extends 'base.html' %} {% block content %}
+<div class="grid grid-cols-1 gap-4 text-white px-12">
+    <h2 class="pt-16 text-3xl font-semibold text-white">Create Category</h2>
+    {% if error %}
+    <div class="bg-red-500 text-white p-3 mb-4 rounded-md text-white">
+        <p class="text-white"><i class="fas fa-exclamation-triangle text-white"></i> {{ error }}</p>
+    </div>
+    {% endif %}
+    <div class="flex flex-row ">
+        <form action="/category/create" method="POST" onsubmit="e => e.preventDefault()" id="category-form"
+            class="flex flex-col w-full" enctype="multipart/form-data">
+
+            <div class="flex flex-col py-3">
+                <label for="category_name" class="text-white">Name</label>
+                <input class="text-black" id="category_name" type="text" name="category_name" />
+            </div>
+
+            <div class="flex flex-col py-3">
+                <label for="category_description" class="text-white">Description</label></p>
+                <textarea class="text-black" id="category_description" name="category_description" rows="2"
+                    cols="50"></textarea>
+            </div>
+
+            <button type="submit" class="text-left font-bold text-white">
+                Submit
+            </button>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

@@ -54,3 +54,37 @@ with connection.cursor() as cursor:
 
 # connection.close()
 # raise err.Error("Already closed")
+
+
+from flask import Flask, send_from_directory
+
+app = Flask(__name__)
+
+# Define the paths to your static folders
+STATIC_FOLDER_1 = 'static_folder_1'
+STATIC_FOLDER_2 = 'static_folder_2'
+
+# Route to serve files from the first static folder
+@app.route('/static1/<path:filename>')
+def serve_static_folder_1(filename):
+    return send_from_directory(STATIC_FOLDER_1, filename)
+
+# Route to serve files from the second static folder
+@app.route('/static2/<path:filename>')
+def serve_static_folder_2(filename):
+    return send_from_directory(STATIC_FOLDER_2, filename)
+
+# Example route to serve an HTML file
+@app.route('/')
+def index():
+    return '''
+    <h1>Serving Multiple Static Folders</h1>
+    <ul>
+        <li><a href="/static1/file1.txt">File from Static Folder 1</a></li>
+        <li><a href="/static2/file2.txt">File from Static Folder 2</a></li>
+    </ul>
+    '''
+
+# Run the application
+if __name__ == '__main__':
+    app.run(debug=True)

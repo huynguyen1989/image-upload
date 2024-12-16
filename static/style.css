@@ -6,7 +6,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    color: black;
+    /* color: black; */
 }
 
 body {
@@ -14,7 +14,7 @@ body {
     overflow-x: hidden;
     scroll-behavior: smooth;
     background-color: #1a202c;
-    color: black; 
+    /* color: black;  */
 
     /* Custom scrollbar styles u can change it C: */
     scrollbar-width: thin;
@@ -73,4 +73,29 @@ body::-webkit-scrollbar-track {
     width: 100%;
     height: 100%;
     object-fit:cover
+}
+
+.logout-link {
+    margin-top: auto;
+}
+.navigation-bar {
+    height: 100vh;
+}
+
+.category-id {
+    min-width: 50px;
+    border: 1px solid ghostwhite;
+}
+.category-name {
+    min-width: 50px;
+    border: 1px solid ghostwhite;
+}
+.category-images {
+    min-width: 50px;
+    border: 1px solid ghostwhite;
+    overflow: auto
+}
+.category-actions {
+    width: auto;
+    border: 1px solid ghostwhite;
 }

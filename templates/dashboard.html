@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% block content %}
 
-<div class="grid grid-cols-1 gap-4 bg-gray-900 text-white px-12 py-12">
+<div class="grid grid-cols-1 gap-4 text-white p-12">
   
     {% if error %}
     <div class="bg-red-500 text-white p-3 mb-4 rounded-md text-white">
@@ -27,11 +27,4 @@
     {% endfor %}
     </div>
 </div>
-<script>
-    const form = document.getElementById("category-form");
-
-    form.addEventListener("submit", (e) => {
-        // e.preventDefault();
-    });
-</script>
 {% endblock %}
