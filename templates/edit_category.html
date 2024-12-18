@@ -4,7 +4,7 @@
 	<div class="card-body">
         <div class="row">
             <div class="col-12">
-                <h2 class="pt-16 text-3xl font-semibold text-white">Create Category</h2>
+                <h2 class="pt-16 text-3xl font-semibold text-white">Edit Category</h2>
                 {% if error %}
                 <div class="bg-red-500 text-white p-3 mb-4 rounded-md text-white">
                     <p class="text-white"><i class="fas fa-exclamation-triangle text-white"></i> {{ error }}</p>
@@ -19,7 +19,7 @@
                             <label for="category_name" class="text-white">Name</label>
                         </div>
                         <div class="col-12">
-                            <input class="" id="category_name" type="text" name="category_name" />
+                            <input class="" id="category_name" type="text" name="category_name" value="{{category.CategoryName}}"/>
                         </div>
                     </div>
         
@@ -29,7 +29,7 @@
                         </div>
                         <div class="col-12">
                             <textarea class="" id="category_description" name="category_description" rows="2"
-                            cols="50"></textarea>
+                            cols="50">{{category.Description}}</textarea>
                         </div>
                     </div>
         

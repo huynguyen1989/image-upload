@@ -8,8 +8,12 @@ def init_category_routes(app):
         if 'username' not in session:
             return redirect(url_for('login'))
         
+        orderBy = request.args.get('q')
+        if not orderBy:
+            orderBy = 'CategoryID'
+        
         sql_select_categories ="""SELECT `CategoryID`, `CategoryName`, `Description` FROM Categories c"""
-        sql_select_images = """SELECT `ImageID`, `ImageURL` FROM SecondTask.Images i WHERE i.CategoryID IN (%s)"""
+        sql_select_images = """SELECT `ImageID`, `ImageURL` FROM Images i WHERE i.CategoryID IN (%s)"""
         categories = []
         with connection.cursor() as cursor:
                 try:
@@ -48,20 +52,32 @@ def init_category_routes(app):
 
         return render_template('create_category.html')
 
-    @app.route('/category/delete/<int:post_id>', methods=['PUT', 'POST'])
-    def delete(post_id):
-        
-        if request.method == 'POST':
-            print("DELETING CATEGORY")
-            sql = """DELETE FROM `Categories` WHERE CategoryID=%s"""
-            with connection.cursor() as cursor:
-                try:
-                    cursor.execute(sql, (request.form['category_name']))
-                    connection.commit()
-                except Exception as e:
-                    print(f"Delete Category Errors: {str(e)}")
+    @app.route('/category/delete/<int:categoryID>', methods=['POST'])
+    def delete(categoryID):
+        sql = """DELETE FROM `Categories` WHERE CategoryID=%s"""
+        with connection.cursor() as cursor:
+            try:
+                cursor.execute(sql, (request.form['CategoryID']))
+                connection.commit()
+            except Exception as e:
+                print(f"Delete Category Errors: {str(e)}")
 
-            return redirect(url_for('category'))
+        return redirect(url_for('category'))
+    
+    @app.route('/category/edit/<int:categoryID>', methods=['POST', 'GET'])
+    def edit(categoryID):
+        if request.method == 'POST':
+            return "Update Cat"
+        sql = """SELECT `CategoryID`, `CategoryName`, `Description` FROM Categories c WHERE c.CategoryID=%s"""
+        category = None
+        with connection.cursor() as cursor:
+            try:
+                cursor.execute(sql, (categoryID))
+                category = cursor.fetchone()
+            except Exception as e:
+                print(f"Delete Category Errors: {str(e)}")
+
+        print(category, '****')
+        return render_template('edit_category.html', category=category)
         
     # show the post with the given id, the id is an integer
-        return f'delete {post_id}'
