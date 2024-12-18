@@ -28,23 +28,23 @@
 								<div class="col-12 p-2">
 									<div class="row">
 										<div class="col-12">
-											<label class="" for="file">Upload Images:</label>
+											<label class="form-label" for="file">Upload Images:</label>
 										</div>
 										<div class="col-12">
-											<input class="" type="file" name="file" multiple />
+											<input class="form-control" type="file" name="file" multiple />
 										</div>
 									</div>
 								</div>
 								<div class="col-12 p-2">
 									<div class="row">
 										<div class="col-12">
-											<label class="" for="category">Choose a category:</label>
+											<label class="form-label" for="category">Choose a category:</label>
 										</div>
 										<div class="col-12">
 											<select
 												name="category"
 												id="category-list"
-												class="py-2"
+												class="py-2 form-select"
 											>
 												{% for category in categories %}
 												<option value="{{category.CategoryID}}">

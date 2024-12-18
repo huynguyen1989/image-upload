@@ -16,35 +16,41 @@
                      enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-12">
-                            <label for="category_name" class="">Name</label>
+                            <label for="category_name" class="form-label">Name</label>
                         </div>
                         <div class="col-12">
-                            <input class="" id="category_name" type="text" name="category_name" value="{{category.CategoryName}}"/>
+                            <input class="form-control" id="category_name" type="text" name="category_name" value="{{category.CategoryName}}"/>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-12">
-                            <label for="category_name" class="">Ordering</label>
+                            <label for="category_name" class="form-label">Ordering</label>
                         </div>
                         <div class="col-12">
-                            <input class="" id="category_name" type="number" name="category_ordering" value="{{category.Ordering}}"/>
+                            <input class="form-control" id="category_name" type="number" name="category_ordering" value="{{category.Ordering}}"/>
                         </div>
                     </div>
         
                     <div class="row">
                         <div class="col-12">
-                            <label for="category_description" class="">Description</label></p>
+                            <label for="category_description" class="form-label">Description</label></p>
                         </div>
                         <div class="col-12">
-                            <textarea class="" id="category_description" name="category_description" rows="2"
+                            <textarea class="form-control" id="category_description" name="category_description" rows="2"
                             cols="50">{{category.Description}}</textarea>
                         </div>
                     </div>
+
+                    <div class="row pt-2">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary p-2">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
         
-                    <button type="submit" class="btn btn-primary">
-                        Submit
-                    </button>
+                    
                 </form>
             </div>
         </div>
