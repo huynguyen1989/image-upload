@@ -4,10 +4,14 @@
 {% include 'head.html' %}
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+
     <div class="app-wrapper">
-        {% include 'topbar.html' %}
-    
-        {% include 'sidebar.html' %}
+        {% if 'username' in session %}
+
+            {% include 'topbar.html' %}
+            {% include 'sidebar.html' %}
+            
+        {% endif %}
         <main class="app-main">
             {% block content %}{% endblock %}
         </main>
@@ -41,6 +45,7 @@
             }
         });
     </script>
+
 </body>
 
 </html>

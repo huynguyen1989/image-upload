@@ -8,11 +8,7 @@ def init_category_routes(app):
         if 'username' not in session:
             return redirect(url_for('login'))
         
-        orderBy = request.args.get('q')
-        if not orderBy:
-            orderBy = 'CategoryID'
-        
-        sql_select_categories ="""SELECT `CategoryID`, `CategoryName`, `Description` FROM Categories c"""
+        sql_select_categories ="""SELECT `CategoryID`, `CategoryName`, `Description` FROM Categories c ORDER BY c.`Ordering`"""
         sql_select_images = """SELECT `ImageID`, `ImageURL` FROM Images i WHERE i.CategoryID IN (%s)"""
         categories = []
         with connection.cursor() as cursor:
@@ -35,14 +31,15 @@ def init_category_routes(app):
         if request.method == 'POST':
             category_name = request.form['category_name']
             category_description = request.form['category_description']
+            category_ordering = request.form['category_ordering']
             
             if len(category_name) <= 0:
                 return render_template('category.html', error='Name is required!')
             
-            sql = """ INSERT INTO `Categories` (`CategoryName`, `Description`) VALUES (%s, %s) """
+            sql = """ INSERT INTO `Categories` (`CategoryName`, `Description`, `Ordering`) VALUES (%s, %s, %s) """
             with connection.cursor() as cursor:
                 try:
-                    cursor.execute(sql, (category_name, category_description))
+                    cursor.execute(sql, (category_name, category_description, category_ordering))
                     connection.commit()
                 except Exception as e:
                     print(f"Create Categories Errors: {str(e)}")
@@ -67,15 +64,26 @@ def init_category_routes(app):
     @app.route('/category/edit/<int:categoryID>', methods=['POST', 'GET'])
     def edit(categoryID):
         if request.method == 'POST':
-            return "Update Cat"
-        sql = """SELECT `CategoryID`, `CategoryName`, `Description` FROM Categories c WHERE c.CategoryID=%s"""
+            category_name = request.form['category_name']
+            category_description = request.form['category_description']
+            category_ordering = request.form['category_ordering']
+            sql_update_category= """UPDATE Categories SET CategoryName=%s, Description=%s, Ordering=%s WHERE CategoryID=%s"""
+            with connection.cursor() as cursor:
+                try:
+                    cursor.execute(sql_update_category, (category_name, category_description, category_ordering, categoryID))
+                    connection.commit()
+                except Exception as e:
+                    print(f"Update Category Errors: {str(e)}")
+            return redirect(url_for('category'))
+        
+        sql = """SELECT `CategoryID`, `CategoryName`, `Description`, `Ordering` FROM Categories c WHERE c.CategoryID=%s"""
         category = None
         with connection.cursor() as cursor:
             try:
                 cursor.execute(sql, (categoryID))
                 category = cursor.fetchone()
             except Exception as e:
-                print(f"Delete Category Errors: {str(e)}")
+                print(f"Edit Category Errors: {str(e)}")
 
         print(category, '****')
         return render_template('edit_category.html', category=category)
