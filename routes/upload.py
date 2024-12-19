@@ -35,10 +35,11 @@ def init_upload_routes(app):
                         # filename_hash_with_extension =  f'{md5_filename_hash}.{str(file.filename).split(".")[1]}'
                         
                         saving_directory = os.path.join(app.config['UPLOAD_FOLDER'], str(file.filename)) # type: ignore
-                        
                         file.save(saving_directory)
                         
-                        cursor.execute(sql_insert_upload_images, (request.form['category'], saving_directory))                
+                        removed_prefix_dot = saving_directory[1:len(saving_directory)]
+                        
+                        cursor.execute(sql_insert_upload_images, (request.form['category'], removed_prefix_dot))                
                         
                     connection.commit()
                 except Exception as e:

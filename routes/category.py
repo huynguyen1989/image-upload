@@ -15,8 +15,6 @@ def init_category_routes(app):
                 try:
                     cursor.execute(sql_select_categories)
                     categories = cursor.fetchall()
-                    if not len(categories):
-                        return "Category table is empty" 
                     
                     for category in categories:
                         cursor.execute(sql_select_images, (category["CategoryID"]))
@@ -26,7 +24,7 @@ def init_category_routes(app):
         return render_template('category.html', categories=categories)
     
     @app.route('/category/<path:create>', methods=['POST', 'GET'])
-    def create(create):
+    def createCategory(create):
         # show the subpath after /path/
         if request.method == 'POST':
             category_name = request.form['category_name']
@@ -50,7 +48,7 @@ def init_category_routes(app):
         return render_template('create_category.html')
 
     @app.route('/category/delete/<int:categoryID>', methods=['POST'])
-    def delete(categoryID):
+    def deleteCategory(categoryID):
         sql = """DELETE FROM `Categories` WHERE CategoryID=%s"""
         with connection.cursor() as cursor:
             try:
@@ -62,7 +60,7 @@ def init_category_routes(app):
         return redirect(url_for('category'))
     
     @app.route('/category/edit/<int:categoryID>', methods=['POST', 'GET'])
-    def edit(categoryID):
+    def editCategory(categoryID):
         if request.method == 'POST':
             category_name = request.form['category_name']
             category_description = request.form['category_description']
@@ -76,16 +74,21 @@ def init_category_routes(app):
                     print(f"Update Category Errors: {str(e)}")
             return redirect(url_for('category'))
         
-        sql = """SELECT `CategoryID`, `CategoryName`, `Description`, `Ordering` FROM Categories c WHERE c.CategoryID=%s"""
+        sql_select_category = """SELECT `CategoryID`, `CategoryName`, `Description`, `Ordering` FROM Categories c WHERE c.CategoryID=%s"""
+        sql_select_category_images = """SELECT i.ImageID, i.ImageURL FROM Images i WHERE i.CategoryID = %s"""
         category = None
+        images = None
         with connection.cursor() as cursor:
             try:
-                cursor.execute(sql, (categoryID))
+                cursor.execute(sql_select_category, (categoryID))
                 category = cursor.fetchone()
+                
+                cursor.execute(sql_select_category_images, (categoryID))
+                images = cursor.fetchall()
             except Exception as e:
                 print(f"Edit Category Errors: {str(e)}")
 
         print(category, '****')
-        return render_template('edit_category.html', category=category)
+        return render_template('edit_category.html', category=category, images=images)
         
     # show the post with the given id, the id is an integer

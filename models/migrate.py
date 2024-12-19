@@ -16,6 +16,7 @@ def migrate():
             `CategoryID` int NOT NULL AUTO_INCREMENT,
             `CategoryName` varchar(255) NOT NULL,
             `Description` longtext,
+            `Ordering` INT NULL
             PRIMARY KEY (`CategoryID`)
             ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
             """,
@@ -24,6 +25,7 @@ def migrate():
             `ImageID` int NOT NULL AUTO_INCREMENT,
             `CategoryID` int NOT NULL,
             `ImageURL` varchar(255) NOT NULL,
+            `Ordering` INT NULL
             PRIMARY KEY (`ImageID`),
             KEY `UploadCategoryID` (`CategoryID`),
             CONSTRAINT `Images_Categories_FK` FOREIGN KEY (`CategoryID`) REFERENCES `Categories` (`CategoryID`) ON DELETE CASCADE ON UPDATE CASCADE
