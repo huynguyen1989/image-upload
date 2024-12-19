@@ -5,11 +5,13 @@ import functools
 def auto_reconnect(func):
     @functools.wraps(func)
     def wrapper( *args, **kwargs):
+        weakConnection = None
         try:
-            return func( *args, **kwargs)
+            weakConnection = func( *args, **kwargs)
+            return weakConnection
         except pymysql.err.OperationalError as e:
             print(f"DB Connection error: {e}")
-            # self.reconnect()
+            weakConnection.reconnect()
             return func( *args, **kwargs)
     return wrapper
 
