@@ -46,7 +46,7 @@ def init_category_routes(app):
         if request.method == 'POST':
             category_name = request.form['category_name']
             category_description = request.form['category_description']
-            category_ordering = request.form['category_ordering']
+            category_ordering = request.form['category_ordering'] or 1
             
             if len(category_name) <= 0:
                 return render_template('category.html', error='Name is required!')

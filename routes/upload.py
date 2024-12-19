@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from models.db import connection
 import os
+import uuid
 
 def init_upload_routes(app):
     @app.route('/upload', methods=['GET', 'POST'])
@@ -30,11 +31,10 @@ def init_upload_routes(app):
                     files = request.files.getlist("file")        
                     for file in files:
                         
-                        # Use MD5 hash for filename
-                        # md5_filename_hash = md5(str(file.filename).encode(), usedforsecurity=True).hexdigest()
-                        # filename_hash_with_extension =  f'{md5_filename_hash}.{str(file.filename).split(".")[1]}'
+                        # Use uuid4 hash for filename
+                        filename_hash_with_extension =  f'{uuid.uuid4()}.{str(file.filename).split(".")[1]}'
                         
-                        saving_directory = os.path.join(app.config['UPLOAD_FOLDER'], str(file.filename)) # type: ignore
+                        saving_directory = os.path.join(app.config['UPLOAD_FOLDER'], str(filename_hash_with_extension)) # type: ignore
                         file.save(saving_directory)
                         
                         removed_prefix_dot = saving_directory[1:len(saving_directory)]
