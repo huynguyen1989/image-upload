@@ -15,7 +15,7 @@ def init_category_routes(app):
                     
                     for category in categories:
                         cursor.execute(sql_select_images, (category["CategoryID"]))
-                        category["uploaded_images"] = cursor.fetchall()
+                        category["UploadImages"] = cursor.fetchall()
                 except Exception as e:
                     print(f"Get All Categories Errors: {str(e)}")      
         return categories
