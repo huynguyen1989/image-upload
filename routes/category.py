@@ -88,7 +88,6 @@ def init_category_routes(app):
             except Exception as e:
                 print(f"Edit Category Errors: {str(e)}")
 
-        print(category, '****')
         return render_template('edit_category.html', category=category, images=images)
         
     # show the post with the given id, the id is an integer
