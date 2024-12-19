@@ -3,6 +3,23 @@ from models.db import connection
 from markupsafe import escape
 
 def init_category_routes(app):
+    @app.route('/api/categories', methods=['GET'])
+    def getCategories():
+        sql_select_categories ="""SELECT `CategoryID`, `CategoryName`, `Description` FROM Categories c ORDER BY c.`Ordering`"""
+        sql_select_images = """SELECT `ImageID`, `ImageURL` FROM Images i WHERE i.CategoryID IN (%s)"""
+        categories = []
+        with connection.cursor() as cursor:
+                try:
+                    cursor.execute(sql_select_categories)
+                    categories = cursor.fetchall()
+                    
+                    for category in categories:
+                        cursor.execute(sql_select_images, (category["CategoryID"]))
+                        category["uploaded_images"] = cursor.fetchall()
+                except Exception as e:
+                    print(f"Get All Categories Errors: {str(e)}")      
+        return categories
+        
     @app.route('/category', methods=['GET'])
     def category():
         if 'username' not in session:
