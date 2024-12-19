@@ -12,7 +12,7 @@
                 {% endif %}
             </div>
             <div class="col-12">
-                <form action="/category/edit/{{category.CategoryID}}" method="POST" onsubmit="e => e.preventDefault()" id="category-form"
+                <form action="/category/edit/{{category.CategoryID}}" method="POST"  id="category-form" class="information-form"
                      enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-12">
@@ -25,10 +25,10 @@
 
                     <div class="row">
                         <div class="col-12">
-                            <label for="category_name" class="form-label">Ordering</label>
+                            <label for="category_ordering" class="form-label">Ordering</label>
                         </div>
                         <div class="col-12">
-                            <input class="form-control" id="category_name" type="number" name="category_ordering" value="{{category.Ordering}}"/>
+                            <input class="form-control" id="category_ordering" type="number" name="category_ordering" value="{{category.Ordering}}"/>
                         </div>
                     </div>
         
@@ -42,9 +42,31 @@
                         </div>
                     </div>
 
+                    <div class="row image-list">
+                        {% for image in images %}
+                        <div class="col-1 image-form pb-4">
+                            <img
+                                class="image-thumbnail"
+                                src="{{image.ImageURL}}"
+                                image-id="{{image.ImageID}}"
+                                alt="{{image.ImageID}}"
+                                srcset=""
+                                id-index="{{loop.index}}"
+                            />
+                            <label for="image_ordering-{{loop.index}}" class="form-label m-0">Order</label>
+                            <input class="form-control" id="image_ordering-{{loop.index}}" type="number" name="image_ordering-{{loop.index}}" />
+    
+                                <button type="submit" class="btn btn-secondary image-delete-btn">
+                                    <i class="bi bi-x-lg"></i>
+                                </button>
+                        </div>
+                                
+                        {% endfor %}
+                    </div>
+
                     <div class="row pt-2">
                         <div class="col-12">
-                            <button type="submit" class="btn btn-primary p-2">
+                            <button type="submit" class="btn btn-primary p-2 ">
                                 Submit
                             </button>
                         </div>

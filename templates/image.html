@@ -1,0 +1,149 @@
+{% extends 'base.html' %} {% block content %}
+<div class="card full-height">
+  <div class="card-body">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h2 class="text-3xl font-semibold">Edit Images</h2>
+          {% if error %}
+          <div class="bg-red-500 p-3 mb-4 rounded-md">
+            <p class="">
+              <i class="fas fa-exclamation-triangle"></i> {{ error }}
+            </p>
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="col-12">
+          <div class="container">
+            <div class="row">
+              <div class="col-12">
+                <label class="form-label">Choose a category:</label>
+              </div>
+              <div class="col-12">
+                <select
+                  name="category"
+                  id="category-list"
+                  class="py-2 form-select"
+                  onchange="onSelectCategoryID(this)"
+                >
+                  <option disabled selected value>
+                    -- select an option --
+                  </option>
+                  {% for category in categories %}
+                  <option value="{{category.CategoryID}}">
+                    {{category.CategoryName}}
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% if images %}
+        <div class="col-12">
+          <div class="row image-list">
+            {% for image in images %}
+            <div class="col-1 image-form pb-4">
+              <img
+                class="image-thumbnail"
+                src="{{image.ImageURL}}"
+                image-id="{{image.ImageID}}"
+                alt="{{image.ImageID}}"
+                srcset=""
+                id-index="{{loop.index}}"
+              />
+              <!-- <label class="form-label m-0">Order</label>
+              <input
+                class="form-control"
+                id="image_ordering-{{loop.index}}"
+                type="number"
+                name="image_ordering-{{loop.index}}"
+              /> -->
+
+              <button
+                type="submit"
+                class="btn btn-secondary image-delete-btn"
+                category-id="{{image.CategoryID}}"
+                image-id="{{image.ImageID}}"
+              >
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.addEventListener("beforeunload", (event) => {
+    // event.preventDefault()
+    console.log("UNLOADING....");
+    console.log(event);
+  });
+
+  // Binding for select value persistant
+  const categorySelectList = document.getElementById("category-list");
+  categorySelectList.value = null;
+  const selectedCategory = localStorage.getItem("category");
+  if (selectedCategory) {
+    categorySelectList.value = selectedCategory;
+  }
+  const onSelectCategoryID = (select) => {
+    localStorage.setItem("category", select.value);
+    return (window.location.href =
+      window.location.origin + "/image/" + select.value);
+  };
+
+  // Handle delete button
+  const imageDeleteBtn = document.getElementsByClassName("image-delete-btn");
+
+  let categoryId, imageId;
+  Array.from(imageDeleteBtn).map((nodeBtn) =>
+    nodeBtn.addEventListener("click", async (event) => {
+      categoryId = nodeBtn.getAttribute("category-id");
+      imageId = nodeBtn.getAttribute("image-id");
+      console.log(imageId, categoryId, "****");
+
+      const formData = new FormData();
+      formData.append("ImageID", imageId);
+      formData.append("CategoryID", categoryId);
+
+      console.log(formData.getAll("CategoryID"), "--------");
+      try {
+        const response = await fetch(`/image/delete/${categoryId}/${imageId}`, {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          return (window.location.href = window.location.href);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    })
+  );
+</script>
+
+<script>
+  let categoryForm = document.querySelector(".information-form");
+  let categoryName = document.getElementById("category_name");
+  let categoryOrdering = document.getElementById("category_ordering");
+  let categoryDescription = document.getElementById("category_description");
+
+  // x.addEventListener('submit', (event) => {
+  //     event.preventDefault()
+  //     console.log(event)
+  // })
+  // console.log(x , ' -------')
+</script>
+{% endblock %}

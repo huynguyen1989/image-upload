@@ -6,7 +6,8 @@
 }
 
 .image-thumbnail {
-    max-width: 75px;
+    min-height: 75px;
+    max-width: 160px;
     width: 100%;
     object-fit:cover
 }
@@ -33,4 +34,20 @@
 
 .btn-full-width {
     width: 100%;
+}
+.image-list {
+    margin-top:2rem;
+    position: relative;
+}
+
+.image-form {
+    position: relative;
+}
+.image-delete-btn {
+    position: absolute;
+    top: -20px;
+    right: -10px;
+}
+#category-form > button > i {
+
 }

@@ -14,8 +14,6 @@ def init_upload_routes(app):
                 try:
                     cursor.execute(sql_select_categories)
                     categories = cursor.fetchall()
-                    if not len(categories):
-                        return "Category table is empty" 
                 except Exception as e:
                     print(f"Get All Categories Errors: {str(e)}")
         
@@ -51,8 +49,6 @@ def init_upload_routes(app):
                     try:
                         cursor.execute(sql_select_categories)
                         categories = cursor.fetchall()
-                        if not len(categories):
-                            return "Category table is empty" 
                         
                         for category in categories:
                             cursor.execute(sql_select_images, (category["CategoryID"]))
