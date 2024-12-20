@@ -15,7 +15,7 @@ def auto_reconnect(func):
             print("Attempting connect to DB")
             weakConnection = func( *args, **kwargs)
             return weakConnection
-        except pymysql.err.OperationalError as e:
+        except pymysql.err.Error as e:
             print(f"DB Connection error: {e}")
             weakConnection.connect(host=host,
                              user=user,

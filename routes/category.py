@@ -6,7 +6,7 @@ def init_category_routes(app):
     @app.route('/api/categories', methods=['GET'])
     def getCategories():
         sql_select_categories ="""SELECT `CategoryID`, `CategoryName`, `Description` FROM Categories c ORDER BY c.`Ordering`"""
-        sql_select_images = """SELECT `ImageID`, `ImageURL` FROM Images i WHERE i.CategoryID IN (%s)"""
+        sql_select_images = """SELECT `ImageID`, `ImageURL`, `Ordering` FROM Images i WHERE i.CategoryID = %s ORDER BY i.Ordering"""
         categories = []
         with connection.cursor() as cursor:
                 try:
@@ -26,7 +26,7 @@ def init_category_routes(app):
             return redirect(url_for('login'))
         
         sql_select_categories ="""SELECT `CategoryID`, `CategoryName`, `Description` FROM Categories c ORDER BY c.`Ordering`"""
-        sql_select_images = """SELECT `ImageID`, `ImageURL` FROM Images i WHERE i.CategoryID IN (%s)"""
+        sql_select_images = """SELECT `ImageID`, `ImageURL`, `Ordering` FROM Images i WHERE i.CategoryID = %s ORDER BY i.Ordering"""
         categories = []
         with connection.cursor() as cursor:
                 try:

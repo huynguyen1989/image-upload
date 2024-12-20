@@ -42,28 +42,6 @@
                         </div>
                     </div>
 
-                    <div class="row image-list">
-                        {% for image in images %}
-                        <div class="col-1 image-form pb-4">
-                            <img
-                                class="image-thumbnail"
-                                src="{{image.ImageURL}}"
-                                image-id="{{image.ImageID}}"
-                                alt="{{image.ImageID}}"
-                                srcset=""
-                                id-index="{{loop.index}}"
-                            />
-                            <label for="image_ordering-{{loop.index}}" class="form-label m-0">Order</label>
-                            <input class="form-control" id="image_ordering-{{loop.index}}" type="number" name="image_ordering-{{loop.index}}" />
-    
-                                <button type="submit" class="btn btn-secondary image-delete-btn">
-                                    <i class="bi bi-x-lg"></i>
-                                </button>
-                        </div>
-                                
-                        {% endfor %}
-                    </div>
-
                     <div class="row pt-2">
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary p-2 ">

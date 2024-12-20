@@ -21,7 +21,7 @@ def init_image_routes(app):
     
     @app.route('/image/<int:categoryID>', methods=['GET'])
     def getImageByCategoryID(categoryID):
-        sql_select_images ="""SELECT `CategoryID`, `ImageID`, `ImageURL` FROM Images i WHERE i.CategoryID = %s"""
+        sql_select_images ="""SELECT `CategoryID`, `ImageID`, `ImageURL`, `Ordering` FROM Images i WHERE i.CategoryID = %s"""
         sql_select_categories ="""SELECT `CategoryID`, `CategoryName`, `Description` FROM `Categories`"""
         images = None
         categories = None
@@ -35,11 +35,6 @@ def init_image_routes(app):
                 except Exception as e:
                     print(f"Get Images By CategoryID Errors: {str(e)}")
         return render_template('image.html', categories=categories, images=images)
-    
-    # @app.route('/image/create/<int:imageID>/<int:categoryID>', methods=['POST'])
-    # def createImage(imageID, categoryID):
-    #     print(imageID, categoryID, '****')
-    #     return redirect(url_for('editCategory', categoryID=categoryID))
     
     @app.route('/image/delete/<int:categoryID>/<int:imageID>', methods=['POST'])
     def deleteImage(categoryID,imageID):
@@ -65,6 +60,25 @@ def init_image_routes(app):
         
         return render_template('dashboard.html', username=session['username'], categories=categories)
     
+    @app.route('/image/ordering', methods=['POST'])
+    def handleImageOrder():
+        if request.is_json: 
+            data = request.get_json()
+            
+            sql_update_image_order = """UPDATE `Images` SET `Ordering`=%s WHERE `ImageID`=%s AND `CategoryID` =%s"""
+            with connection.cursor() as cursor:
+                try:
+                    for image in data:
+                        cursor.execute(sql_update_image_order, (image["Ordering"], int(image["ImageID"]), int(image["CategoryID"])))
+                        
+                    connection.commit()
+                    
+                    return jsonify({'success':True}), 200, {'ContentType':'application/json'} 
+                except Exception as e:
+                    print(f"Update Image Ordering Errors: {str(e)}")
+        else:
+            return jsonify({'message': 'Invalid request'}), 400
+        
     @app.route('/api/data', methods=['POST'])
     def handle_data():
         if request.is_json: 
@@ -72,7 +86,7 @@ def init_image_routes(app):
             # Process the data
             print(data, '****')
             print(type(data), '**type**')
-            print(data["app_package_name"], '****')
-            return redirect(url_for('category')), 200
+            # print(data["app_package_name"], '****')
+            return data, 200
         else:
             return jsonify({'message': 'Invalid request'}), 400
