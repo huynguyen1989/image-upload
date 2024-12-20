@@ -128,13 +128,11 @@
     nodeBtn.addEventListener("click", async (event) => {
       categoryId = nodeBtn.getAttribute("category-id");
       imageId = nodeBtn.getAttribute("image-id");
-      console.log(imageId, categoryId, "****");
 
       const formData = new FormData();
       formData.append("ImageID", imageId);
       formData.append("CategoryID", categoryId);
 
-      console.log(formData.getAll("CategoryID"), "--------");
       try {
         const response = await fetch(`/image/delete/${categoryId}/${imageId}`, {
           method: "POST",
