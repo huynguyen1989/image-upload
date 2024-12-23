@@ -1,20 +1,19 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, session
-
+from config import settings
 app = Flask(__name__)
-app.config.from_object("config.Config")
 
 # Static folders
 app.config['ROOT_DIRECTORY'] = os.getcwd()
 app.config['UPLOAD_FOLDER']  = "./static/uploads/"
+
+app.secret_key = settings["APP_SECRET_KEY"]
 
 # Import Routes 
 from routes.category import init_category_routes
 init_category_routes(app)
 from routes.upload import init_upload_routes
 init_upload_routes(app)
-from routes.dashboard import init_dashboard_routes
-init_dashboard_routes(app)
 from routes.image import init_image_routes
 init_image_routes(app)
 
@@ -42,4 +41,4 @@ def logout():
 
 # Run the application
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host=settings['APPLICATION_HOST'], port=int(settings['APPLICATION_PORT']), debug=bool(settings['APPLICATION_DEBUG']))
