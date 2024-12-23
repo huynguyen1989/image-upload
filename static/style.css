@@ -52,3 +52,7 @@
 #category-form > button > i {
 
 }
+
+.category-icon {
+    max-width: 50px;
+}
