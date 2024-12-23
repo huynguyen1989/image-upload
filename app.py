@@ -6,6 +6,7 @@ app = Flask(__name__)
 # Static folders
 app.config['ROOT_DIRECTORY'] = os.getcwd()
 app.config['UPLOAD_FOLDER']  = "./static/uploads/"
+app.config['CATEGORY_ICONS']  = "./static/category-icons/"
 
 app.secret_key = settings["APP_SECRET_KEY"]
 

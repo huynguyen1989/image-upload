@@ -42,7 +42,16 @@
 						<tr>
 							<td class="category-id text-center">{{category.CategoryID}}</td>
 							<td class="category-name text-center">
-								{{category.CategoryName}}
+								<div class="row">
+									<div class="col-12">
+										<p>{{category.CategoryName}}</p>
+									</div>
+									{% if category.IconURL %}
+									<div class="col-12">
+										<img src="{{category.IconURL}}" alt="{{category.CategoryName}}" srcset="">
+									</div>
+									{% endif %}
+								</div>
 							</td>
 							<td class="category-images">
 								<div class="d-flex flex flex-row">

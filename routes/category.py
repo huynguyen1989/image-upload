@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from models.db import attemptConnectToDB
 from markupsafe import escape
 from models.queries import queries_templates
+import os
 
 def init_category_routes(app):
     @app.route('/api/categories', methods=['GET'])
@@ -46,13 +47,21 @@ def init_category_routes(app):
             category_name = request.form['category_name']
             category_description = request.form['category_description']
             category_ordering = request.form['category_ordering'] or 1
+            saving_directory = None
             
             if len(category_name) <= 0:
                 return render_template('category.html', error='Name is required!')
             
+            files = request.files.getlist("file")
+            if files[0]:
+                icon_file = files[0]
+                saving_directory = os.path.join(app.config['CATEGORY_ICONS'], str(icon_file.filename))
+                icon_file.save(saving_directory)
+                saving_directory = saving_directory[1:]
+            
             connection = attemptConnectToDB()
             cursor = connection.cursor()
-            cursor.execute(queries_templates['sql_create_category'], (category_name, category_description, category_ordering))
+            cursor.execute(queries_templates['sql_create_category'], (category_name, category_description, category_ordering, saving_directory))
             connection.commit()
             
             return render_template('create_category.html')
@@ -75,14 +84,21 @@ def init_category_routes(app):
             category_name = request.form['category_name']
             category_description = request.form['category_description']
             category_ordering = request.form['category_ordering']
+            saving_directory = None
+            
+            files = request.files.getlist("file")
+            if files[0]:
+                icon_file = files[0]
+                saving_directory = os.path.join(app.config['CATEGORY_ICONS'], str(icon_file.filename))
+                icon_file.save(saving_directory)
+                saving_directory = saving_directory[1:]
             
             connection = attemptConnectToDB()
             cursor = connection.cursor()
-            cursor.execute(queries_templates['sql_update_category'], (category_name, category_description, category_ordering, categoryID))
+            cursor.execute(queries_templates['sql_update_category'], (category_name, category_description, category_ordering, saving_directory, categoryID))
             connection.commit()
             
         category = None
-        images = None
         
         connection = attemptConnectToDB()
         cursor = connection.cursor()
@@ -90,7 +106,7 @@ def init_category_routes(app):
         cursor.execute(queries_templates['sql_select_category_by_id'], (categoryID))
         category = cursor.fetchone()
         
-        cursor.execute(queries_templates['sql_select_images_by_category_id'], (categoryID))
-        images = cursor.fetchall()
+        # cursor.execute(queries_templates['sql_select_images_by_category_id'], (categoryID))
+        # images = cursor.fetchall()
 
-        return render_template('edit_category.html', category=category, images=images)
+        return render_template('edit_category.html', category=category)

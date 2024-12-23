@@ -1,59 +1,93 @@
 {% extends 'base.html' %} {% block content %}
 
 <div class="card full-height">
-	<div class="card-body">
-        <div class="row">
-            <div class="col-12">
-                <h2 class="pt-16 text-3xl font-semibold ">Create Category</h2>
-                {% if error %}
-                <div class="bg-red-500  p-3 mb-4 rounded-md ">
-                    <p class=""><i class="fas fa-exclamation-triangle "></i> {{ error }}</p>
-                </div>
-                {% endif %}
-            </div>
-            <div class="col-12">
-                <form action="/category/create" method="POST" onsubmit="e => e.preventDefault()" id="category-form"
-                     enctype="multipart/form-data">
-                    <div class="row">
-                        <div class="col-12">
-                            <label for="category_name" class="form-label">Name</label>
-                        </div>
-                        <div class="col-12">
-                            <input class="form-control" id="category_name" type="text" name="category_name" />
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-12">
-                            <label for="category_name" class="form-label">Ordering</label>
-                        </div>
-                        <div class="col-12">
-                            <input class="form-control" id="category_name" type="number" name="category_ordering" />
-                        </div>
-                    </div>
-        
-                    <div class="row">
-                        <div class="col-12">
-                            <label for="category_description" class="form-label">Description</label></p>
-                        </div>
-                        <div class="col-12">
-                            <textarea class="form-control" id="category_description" name="category_description" rows="2"
-                            cols="50"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="row pt-2">
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-primary">
-                                Submit
-                            </button>
-                        </div>
-                    </div>
-        
-                    
-                </form>
-            </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12">
+        <h2 class="pt-16 text-3xl font-semibold">Create Category</h2>
+        {% if error %}
+        <div class="bg-red-500 p-3 mb-4 rounded-md">
+          <p class="">
+            <i class="fas fa-exclamation-triangle"></i> {{ error }}
+          </p>
         </div>
+        {% endif %}
+      </div>
+      <div class="col-12">
+        <form
+          action="/category/create"
+          method="POST"
+          onsubmit="e => e.preventDefault()"
+          id="category-form"
+          enctype="multipart/form-data"
+        >
+          <div class="row">
+            <div class="col-12">
+              <label for="category_name" class="form-label">Name</label>
+            </div>
+            <div class="col-12">
+              <input
+                class="form-control"
+                id="category_name"
+                type="text"
+                name="category_name"
+              />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <label class="form-label" for="file">Upload Icon:</label>
+            </div>
+            <div class="col-12">
+              <input
+                class="form-control"
+                type="file"
+                name="file"
+                accept="image/*"
+              />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <label for="category_name" class="form-label">Ordering</label>
+            </div>
+            <div class="col-12">
+              <input
+                class="form-control"
+                id="category_name"
+                type="number"
+                name="category_ordering"
+              />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <label for="category_description" class="form-label"
+                >Description</label
+              >
+            </div>
+            <div class="col-12">
+              <textarea
+                class="form-control"
+                id="category_description"
+                name="category_description"
+                rows="2"
+                cols="50"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="row pt-2">
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
 </div>
 {% endblock %}
